@@ -1,0 +1,18 @@
+---
+- name: Launch instance
+  ec2:
+    key_name: "{{ keypair }}"
+    group_id: "{{ security_group }}"
+    instance_type: "{{ instance_type }}"
+    image: "{{ image }}"
+    wait: true
+    region: "{{ region }}"
+    vpc_subnet_id: " {{ subnet_id }}"
+    assign_public_ip: yes
+    count: {{ count }}
+  register: ec2
+
+- name: Show IP
+  debug: 
+    msg: "Public IP is {{ item.public_ip }}"
+  with_items: "{{ ec2.instances }}"
